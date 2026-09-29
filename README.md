@@ -80,7 +80,8 @@ At `pod install`:
   deployment target is below the minimum of the active Xcode's SDK (15.0 in Xcode 27) to your
   app's deployment target. It prints each change, for example
   `[react-native-xcode27] RNSVG-RNSVGFilters: iOS 12.4 -> 15.1`. Targets the SDK accepts are left
-  alone, and nothing is raised above your app's own deployment target.
+  alone, and nothing is raised above your app's own deployment target. Xcode 26's iOS SDK accepts
+  12.0 and later, so there it normally changes nothing.
 - If the `fmt` pod is older than 12.1, it compiles that one pod as C++17, the same change as the
   usual Podfile workaround, and prints `[react-native-xcode27] fmt 11.0.2: compiled as C++17`.
 - The podspec loads this from `cocoapods/xcode27.rb` by extending CocoaPods' Podfile
@@ -105,13 +106,15 @@ At launch, when built with the iOS 27 SDK:
 
 ## How it was checked
 
-Xcode 27.0 (27A266a) on macOS 27.0, CocoaPods 1.16.2, iPhone 18 Pro simulator on iOS 27.0.
+Xcode 27.0 (27A266a) on macOS 27.0, CocoaPods 1.16.2, iPhone 18 Pro simulator on iOS 27.0. CI adds
+CocoaPods 1.17.0 on GitHub's Xcode 27 image, and Xcode 16.4 and 26.6.
 
 | App | Without it | With it |
 | --- | --- | --- |
 | React Native 0.86.3 with react-native-svg 15.15.5 and async-storage 3.1.1 | Build fails on `RNSVG-RNSVGFilters` (12.4) and `AsyncStorage-AsyncStorage_resources` (13.0) | Builds and launches. `Linking.getInitialURL()` returns the link that launched the app |
 | Expo SDK 56, default template with Expo Router and react-native-svg 15.15.4 | Build fails on `RNSVG-RNSVGFilters` | Builds and launches. A link that launches the app opens the linked route |
 | Expo SDK 54 (React Native 0.81.5), blank template with react-native-svg 15.12.1 | Build fails on `RNSVG-RNSVGFilters` | Builds and launches |
+| React Native 0.81.5 built from source, community template with react-native-svg 15.12.1 | Build fails on `RNSVG-RNSVGFilters`, and its `fmt` 11.0.2 pod fails to compile as C++20 (`call to consteval function`) | Builds, with fmt compiled as C++17 |
 | Test app with a pod whose library and resource bundle target iOS 12.4, and a stand-in for fmt 11.0.2 that compiles only below C++20 | Build fails | Builds, with fmt compiled as C++17 |
 | Minimal UIKit app on the app-based life cycle | Fails to launch | Launches. The window follows the scene into landscape. Links reach `application:openURL:options:` whether they launch the app or arrive while it runs, and the app delegate's foreground and background methods run as they did before |
 | Apps that declare a scene, in code or in `Info.plist` | | Launch with their own scene delegate. The launch fix stays out |
