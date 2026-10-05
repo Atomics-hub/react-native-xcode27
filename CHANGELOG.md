@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0
+
+- At `pod install`, turns Swift explicit modules off for pods that use Swift C++ interop when the
+  app supports iOS before 18. Built with Xcode 27's explicit modules, which React Native uses for
+  every pod from 0.87, such pods (react-native-nitro-modules, behind react-native-mmkv 4 and
+  VisionCamera 5) reference libc++ functions that only exist in iOS 18 and later, and the app stops
+  at launch on iOS 16 and 17 with "Symbol not found: __ZNSt13exception_ptr31__from_native_exception_pointerEPv".
+- For fmt before 12.1, also turns consteval off for Apple Clang in the pod's copy of `fmt/base.h`, so
+  C++20 pods that include fmt's headers compile too, not only fmt itself.
+- README: Expo SDK 58 adopts the scene life cycle by default.
+
 ## 0.1.0
 
 First release.
