@@ -83,8 +83,9 @@ to 0.86. 0.87 removed that, so every pod now builds with explicit modules.
 
 The crash was reported in react-native-nitro-modules
 ([margelo/nitro#1652](https://github.com/margelo/nitro/issues/1652), on the iOS 17.5 simulator); its
-fix ([#1666](https://github.com/margelo/nitro/pull/1666)) is not merged, and 0.37.1, the latest
-release, still references both symbols.
+fixes ([#1666](https://github.com/margelo/nitro/pull/1666), and the maintainers'
+[#1675](https://github.com/margelo/nitro/pull/1675)) are not merged, and 0.37.1, the latest release,
+still references both symbols.
 
 ## Why Xcode 27 breaks the launch
 
